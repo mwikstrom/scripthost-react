@@ -1,6 +1,6 @@
 {
   "name": "scripthost-react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React bindings for Scripthost",
   "main": "./dist/scripthost-react.js",
   "typings": "./dist/scripthost-react.d.ts",
