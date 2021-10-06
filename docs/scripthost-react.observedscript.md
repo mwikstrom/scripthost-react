@@ -15,8 +15,7 @@ export interface ObservedScript
 
 |  Property | Type | Description |
 |  --- | --- | --- |
-|  [error](./scripthost-react.observedscript.error.md) | unknown |  |
-|  [failed](./scripthost-react.observedscript.failed.md) | boolean |  |
+|  [error](./scripthost-react.observedscript.error.md) | Error \| null |  |
 |  [ready](./scripthost-react.observedscript.ready.md) | boolean |  |
 |  [result](./scripthost-react.observedscript.result.md) | ScriptValue |  |
 

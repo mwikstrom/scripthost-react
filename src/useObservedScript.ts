@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import { ScriptEvalOptions } from "scripthost";
 import { ScriptValue } from "scripthost-core";
 import { useScriptHost } from "./ScriptHostScope";
@@ -9,8 +9,7 @@ import { useScriptHost } from "./ScriptHostScope";
 export interface ObservedScript {
     result: ScriptValue;
     ready: boolean;
-    failed: boolean;
-    error: unknown;
+    error: Error | null;
 }
 
 /**
@@ -26,12 +25,17 @@ export function useObservedScript(script: string, options: UseObservedScriptOpti
     const host = useScriptHost();
     const [output, setOutput] = useState(initialOutput);
 
-    useEffect(() => {
-        const onNext = (result: ScriptValue) => setOutput(successOutput(result));
-        const onError = (error: unknown) => setOutput(errorOutput(error));
+    useLayoutEffect(() => {
+        const onNext = (result: ScriptValue) => {
+            setOutput(successOutput(result));
+        };
+        const onError = (err: unknown) => {
+            const error = err instanceof Error ? err : new Error("Script failed");
+            setOutput(errorOutput(error));
+        };
         setOutput(initialOutput);
         return host.observe(script, { instanceId, timeout, onNext, onError });
-    }, [host, script, instanceId, timeout, setOutput]);
+    }, [host, script, instanceId, timeout]);
 
     return output;
 }
@@ -39,20 +43,17 @@ export function useObservedScript(script: string, options: UseObservedScriptOpti
 const initialOutput: ObservedScript = Object.freeze({
     result: undefined,
     ready: false,
-    failed: false,
-    error: undefined,
+    error: null,
 });
 
 const successOutput = (result: ScriptValue): ObservedScript => Object.freeze({
     result,
     ready: true,
-    failed: false,
-    error: undefined,
+    error: null,
 });
 
-const errorOutput = (error: unknown): ObservedScript => Object.freeze({
+const errorOutput = (error: Error): ObservedScript => Object.freeze({
     result: undefined,
     ready: true,
-    failed: true,
     error,
 });

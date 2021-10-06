@@ -16,4 +16,5 @@ export interface ScriptHostScopeProps
 |  Property | Type | Description |
 |  --- | --- | --- |
 |  [children?](./scripthost-react.scripthostscopeprops.children.md) | ReactNode | <i>(Optional)</i> |
+|  [host?](./scripthost-react.scripthostscopeprops.host.md) | ScriptHost | <i>(Optional)</i> |
 

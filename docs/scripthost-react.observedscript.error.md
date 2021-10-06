@@ -7,5 +7,5 @@
 <b>Signature:</b>
 
 ```typescript
-error: unknown;
+error: Error | null;
 ```

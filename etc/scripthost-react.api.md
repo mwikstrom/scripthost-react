@@ -4,18 +4,21 @@
 
 ```ts
 
+import { BrowserSandboxOptions } from 'scripthost-browser';
 import { FC } from 'react';
 import { ReactNode } from 'react';
 import { ScriptEvalOptions } from 'scripthost';
 import { ScriptHost } from 'scripthost';
+import { ScriptHostOptions } from 'scripthost';
 import { ScriptValue } from 'scripthost-core';
+
+// @public (undocumented)
+export function createBrowserScriptHost(options?: ScriptHostOptions & Pick<BrowserSandboxOptions, "unsafe">): ScriptHost;
 
 // @public (undocumented)
 export interface ObservedScript {
     // (undocumented)
-    error: unknown;
-    // (undocumented)
-    failed: boolean;
+    error: Error | null;
     // (undocumented)
     ready: boolean;
     // (undocumented)
@@ -29,6 +32,8 @@ export const ScriptHostScope: FC<ScriptHostScopeProps>;
 export interface ScriptHostScopeProps {
     // (undocumented)
     children?: ReactNode;
+    // (undocumented)
+    host?: ScriptHost;
 }
 
 // @public (undocumented)

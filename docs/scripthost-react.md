@@ -10,6 +10,7 @@ React bindings for Scripthost
 
 |  Function | Description |
 |  --- | --- |
+|  [createBrowserScriptHost(options)](./scripthost-react.createbrowserscripthost.md) |  |
 |  [useObservedScript(script, options)](./scripthost-react.useobservedscript.md) |  |
 |  [useScriptInvoker(script, options)](./scripthost-react.usescriptinvoker.md) |  |
 

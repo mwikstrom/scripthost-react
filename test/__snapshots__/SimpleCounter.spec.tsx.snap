@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Simple counter: Initializing 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Initializing
+  </div>,
+]
+`;
+
+exports[`Simple counter: Value = 0 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    0
+  </div>,
+]
+`;
+
+exports[`Simple counter: Value = 1 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    1
+  </div>,
+]
+`;
+
+exports[`Simple counter: Value = 2 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    2
+  </div>,
+]
+`;

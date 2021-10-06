@@ -1,12 +1,13 @@
 import React, { createContext, FC, ReactNode, useContext, useMemo } from "react";
-import { ScriptHost, ScriptHostOptions } from "scripthost";
-import { BrowserSandbox } from "scripthost-browser";
+import { ScriptHost } from "scripthost";
+import { createBrowserScriptHost } from "./createBrowserScriptHost";
 
 /**
  * @public
  */
 export interface ScriptHostScopeProps {
     children?: ReactNode;
+    host?: ScriptHost;
 }
 
 /**
@@ -14,7 +15,7 @@ export interface ScriptHostScopeProps {
  */
 export const ScriptHostScope: FC<ScriptHostScopeProps> = props => {
     const {  children } = props;
-    const host = useMemo(() => new ScriptHost(defaultHostOptions), []);
+    const host = useMemo(() => props.host ?? createBrowserScriptHost(), [props.host]);
     return (
         <ScriptHostContext.Provider
             value={host}
@@ -28,8 +29,4 @@ export const ScriptHostScope: FC<ScriptHostScopeProps> = props => {
  */
 export const useScriptHost = (): ScriptHost => useContext(ScriptHostContext);
 
-const createBrowserSandbox = () => new BrowserSandbox();
-
-const defaultHostOptions: ScriptHostOptions = { createSandbox: createBrowserSandbox };
-
-const ScriptHostContext = createContext<ScriptHost>(new ScriptHost(defaultHostOptions));
+const ScriptHostContext = createContext<ScriptHost>(createBrowserScriptHost());
