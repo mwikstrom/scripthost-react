@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { ScriptEvalOptions } from "scripthost";
 import { ScriptValue } from "scripthost-core";
 import { useScriptHost } from "./ScriptHostScope";

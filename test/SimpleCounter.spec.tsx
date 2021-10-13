@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 import { create, act, ReactTestRenderer } from "react-test-renderer";
 import { ScriptHost } from "scripthost";
 import { createBrowserScriptHost, ScriptHostScope, useObservedScript, useScriptInvoker } from "../src";
