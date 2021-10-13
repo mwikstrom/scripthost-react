@@ -35,6 +35,11 @@ test("Simple counter", async () => {
         renderer.update(element);
     });
     expect(renderer!.toJSON()).toMatchSnapshot("Value = 2");
+
+    // Unmount and wait for observed script linger timeout
+    jest.useFakeTimers();
+    act(() => renderer!.unmount());
+    jest.runAllTimers();
 });
 
 const CounterControl: FC<{ host: ScriptHost }> = ({host}) => (
