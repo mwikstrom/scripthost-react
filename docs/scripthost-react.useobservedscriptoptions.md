@@ -8,5 +8,5 @@
 <b>Signature:</b>
 
 ```typescript
-export declare type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId" | "timeout">;
+export declare type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId">;
 ```
