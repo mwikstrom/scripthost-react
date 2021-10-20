@@ -8,14 +8,14 @@
 <b>Signature:</b>
 
 ```typescript
-export declare function useObservedScript(script: string, options?: UseObservedScriptOptions): ObservedScript;
+export declare function useObservedScript(script: string | null, options?: UseObservedScriptOptions): ObservedScript;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  script | string |  |
+|  script | string \| null |  |
 |  options | [UseObservedScriptOptions](./scripthost-react.useobservedscriptoptions.md) |  |
 
 <b>Returns:</b>

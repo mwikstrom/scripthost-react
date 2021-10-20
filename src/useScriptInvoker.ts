@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { ScriptEvalOptions } from "scripthost";
 import { ScriptValue } from "scripthost-core";
+import { isNonVoidScript } from "./internal/void-script";
 import { useScriptHost } from "./ScriptHostScope";
 
 /**
@@ -16,8 +17,14 @@ export type UseScriptInvokerOptions = Pick<ScriptEvalOptions, "instanceId" | "ti
 /**
  * @public
  */
-export function useScriptInvoker(script: string, options: UseScriptInvokerOptions = {}): ScriptInvoker {
+export function useScriptInvoker(script: string | null, options: UseScriptInvokerOptions = {}): ScriptInvoker {
     const { instanceId, timeout } = options;
     const host = useScriptHost();
-    return useCallback(() => host.eval(script, { instanceId, timeout }), [host, script, instanceId, timeout]);
+    return useCallback<ScriptInvoker>(async () => {
+        if (isNonVoidScript(script)) {
+            await host.eval(script, { instanceId, timeout });
+        } else {
+            return void(0);
+        }
+    }, [host, script, instanceId, timeout]);
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ScriptEvalOptions, ScriptHost, ScriptObserveOptions } from "scripthost";
 import { ScriptValue } from "scripthost-core";
+import { isNonVoidScript } from "./internal/void-script";
 import { useScriptHost } from "./ScriptHostScope";
 
 /**
@@ -20,15 +21,23 @@ export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId">;
 /**
  * @public
  */
-export function useObservedScript(script: string, options: UseObservedScriptOptions = {}): ObservedScript {
+export function useObservedScript(script: string | null, options: UseObservedScriptOptions = {}): ObservedScript {
     const { instanceId } = options;
     const host = useScriptHost();
-    const entry = useMemo(() => getCacheEntry(host, script, instanceId), [host, script, instanceId]);
-    const [output, setOutput] = useState(entry.output);
+    const entry = useMemo(() => {
+        if (isNonVoidScript(script)) {
+            return getCacheEntry(host, script, instanceId);
+        } else {
+            return null;
+        }
+    }, [host, script, instanceId]);
+    const [output, setOutput] = useState(entry ? entry.output : successOutput(void(0)));
 
     useEffect(() => {
-        setOutput(entry.output);
-        return entry.observe(setOutput);
+        if (entry) {
+            setOutput(entry.output);
+            return entry.observe(setOutput);
+        }
     }, [entry]);
 
     return output;

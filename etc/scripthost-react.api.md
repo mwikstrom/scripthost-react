@@ -40,7 +40,7 @@ export interface ScriptHostScopeProps {
 export type ScriptInvoker = () => Promise<ScriptValue>;
 
 // @public (undocumented)
-export function useObservedScript(script: string, options?: UseObservedScriptOptions): ObservedScript;
+export function useObservedScript(script: string | null, options?: UseObservedScriptOptions): ObservedScript;
 
 // @public (undocumented)
 export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId">;
@@ -49,7 +49,7 @@ export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId">;
 export const useScriptHost: () => ScriptHost;
 
 // @public (undocumented)
-export function useScriptInvoker(script: string, options?: UseScriptInvokerOptions): ScriptInvoker;
+export function useScriptInvoker(script: string | null, options?: UseScriptInvokerOptions): ScriptInvoker;
 
 // @public (undocumented)
 export type UseScriptInvokerOptions = Pick<ScriptEvalOptions, "instanceId" | "timeout">;

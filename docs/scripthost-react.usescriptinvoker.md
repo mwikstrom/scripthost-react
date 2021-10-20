@@ -8,14 +8,14 @@
 <b>Signature:</b>
 
 ```typescript
-export declare function useScriptInvoker(script: string, options?: UseScriptInvokerOptions): ScriptInvoker;
+export declare function useScriptInvoker(script: string | null, options?: UseScriptInvokerOptions): ScriptInvoker;
 ```
 
 ## Parameters
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  script | string |  |
+|  script | string \| null |  |
 |  options | [UseScriptInvokerOptions](./scripthost-react.usescriptinvokeroptions.md) |  |
 
 <b>Returns:</b>
