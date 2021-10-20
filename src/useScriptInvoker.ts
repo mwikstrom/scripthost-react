@@ -12,19 +12,19 @@ export type ScriptInvoker = () => Promise<ScriptValue>;
 /**
  * @public
  */
-export type UseScriptInvokerOptions = Pick<ScriptEvalOptions, "instanceId" | "timeout">;
+export type UseScriptInvokerOptions = Pick<ScriptEvalOptions, "instanceId" | "timeout" | "vars">;
 
 /**
  * @public
  */
 export function useScriptInvoker(script: string | null, options: UseScriptInvokerOptions = {}): ScriptInvoker {
-    const { instanceId, timeout } = options;
+    const { instanceId, timeout, vars } = options;
     const host = useScriptHost();
     return useCallback<ScriptInvoker>(async () => {
         if (isNonVoidScript(script)) {
-            await host.eval(script, { instanceId, timeout });
+            await host.eval(script, { instanceId, timeout, vars });
         } else {
             return void(0);
         }
-    }, [host, script, instanceId, timeout]);
+    }, [host, script, instanceId, timeout, vars]);
 }

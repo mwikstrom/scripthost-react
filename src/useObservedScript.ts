@@ -16,17 +16,17 @@ export interface ObservedScript {
 /**
  * @public
  */
-export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId">;
+export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId" | "vars">;
 
 /**
  * @public
  */
 export function useObservedScript(script: string | null, options: UseObservedScriptOptions = {}): ObservedScript {
-    const { instanceId } = options;
+    const { instanceId, vars } = options;
     const host = useScriptHost();
     const entry = useMemo(() => {
         if (isNonVoidScript(script)) {
-            return getCacheEntry(host, script, instanceId);
+            return getCacheEntry(host, script, instanceId, vars);
         } else {
             return null;
         }
@@ -141,7 +141,12 @@ class CacheEntry {
     }
 }
 
-const getCacheEntry = (host: ScriptHost, script: string, instanceId: string | undefined): CacheEntry => {
+const getCacheEntry = (
+    host: ScriptHost,
+    script: string,
+    instanceId: string | undefined,
+    vars?: Record<string, ScriptValue>,
+): CacheEntry => {
     let perHost = PER_HOST_CACHE.get(host);
     if (!perHost) {
         PER_HOST_CACHE.set(host, perHost = new Map());
@@ -154,13 +159,28 @@ const getCacheEntry = (host: ScriptHost, script: string, instanceId: string | un
 
     let perInstance = perScript.get(instanceId);
     if (!perInstance) {
-        perScript.set(instanceId, perInstance = new CacheEntry(host, script, instanceId));
+        perScript.set(instanceId, perInstance = { mapped: new WeakMap() });
     }
 
-    return perInstance;
+    let perVars = vars ? perInstance.mapped.get(vars) : perInstance.unmapped;
+    if (!perVars) {
+        perVars = new CacheEntry(host, script, instanceId);
+        if (vars) {
+            perInstance.mapped.set(vars, perVars);
+        } else {
+            perInstance.unmapped = perVars;
+        }
+    }
+
+    return perVars;
 };
 
-const PER_HOST_CACHE = new WeakMap<ScriptHost, Map<string, Map<string | undefined, CacheEntry>>>();
+interface PerVarCache {
+    unmapped?: CacheEntry;
+    mapped: WeakMap<Record<string, ScriptValue>, CacheEntry>;
+}
+
+const PER_HOST_CACHE = new WeakMap<ScriptHost, Map<string, Map<string | undefined, PerVarCache>>>();
 
 const initialOutput: ObservedScript = Object.freeze({
     result: undefined,
