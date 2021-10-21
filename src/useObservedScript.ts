@@ -48,13 +48,20 @@ class CacheEntry {
     readonly #host: ScriptHost;
     readonly #script: string;
     readonly #instanceId: string | undefined;
+    readonly #vars: Record<string, ScriptValue> | undefined;
     #output = initialOutput;
     #dispose: (() => void) | null = null;
 
-    constructor(host: ScriptHost, script: string, instanceId: string | undefined) {
+    constructor(
+        host: ScriptHost, 
+        script: string, 
+        instanceId: string | undefined, 
+        vars: Record<string, ScriptValue> | undefined,
+    ) {
         this.#host = host;
         this.#script = script;
         this.#instanceId = instanceId;
+        this.#vars = vars;
     }
 
     get output(): ObservedScript {
@@ -99,8 +106,9 @@ class CacheEntry {
 
         const options: ScriptObserveOptions = {
             instanceId: this.#instanceId,
+            vars: this.#vars,
             onNext: result => this.#onNext(result),
-            onError: error => this.#onError(error),
+            onError: error => this.#onError(error),            
         };
 
         this.#dispose = this.#host.observe(this.#script, options);
@@ -164,7 +172,7 @@ const getCacheEntry = (
 
     let perVars = vars ? perInstance.mapped.get(vars) : perInstance.unmapped;
     if (!perVars) {
-        perVars = new CacheEntry(host, script, instanceId);
+        perVars = new CacheEntry(host, script, instanceId, vars);
         if (vars) {
             perInstance.mapped.set(vars, perVars);
         } else {
