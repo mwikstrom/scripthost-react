@@ -30,7 +30,7 @@ export function useObservedScript(script: string | null, options: UseObservedScr
         } else {
             return null;
         }
-    }, [host, script, instanceId]);
+    }, [host, script, instanceId, vars]);
     const [output, setOutput] = useState(entry ? entry.output : successOutput(void(0)));
 
     useEffect(() => {
