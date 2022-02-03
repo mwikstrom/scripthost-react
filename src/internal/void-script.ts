@@ -1,6 +1,6 @@
 /** @internal */
 export function isVoidScript(script: string | null): boolean {
-    return script === null || /^\s*(?:\{\s*\}\s*)?$/.test(script);
+    return !script || /^\s*(?:\{\s*\}\s*)?$/.test(script);
 }
 
 /** @internal */

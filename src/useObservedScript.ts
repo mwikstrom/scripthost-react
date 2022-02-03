@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ScriptEvalOptions, ScriptHost, ScriptObserveOptions } from "scripthost";
 import { ScriptValue } from "scripthost-core";
-import { isNonVoidScript } from "./internal/void-script";
+import { isVoidScript } from "./internal/void-script";
 import { useScriptHost } from "./ScriptHostScope";
 
 /**
@@ -24,26 +24,19 @@ export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId" | "v
 export function useObservedScript(script: string | null, options: UseObservedScriptOptions = {}): ObservedScript {
     const { instanceId, vars } = options;
     const host = useScriptHost();
-    const entry = useMemo(() => {
-        if (isNonVoidScript(script)) {
-            return getCacheEntry(host, script, instanceId, vars);
-        } else {
-            return null;
-        }
-    }, [host, script, instanceId, vars]);
-    const [output, setOutput] = useState(entry ? entry.output : successOutput(void(0)));
+    const deps = [host, script || "", instanceId, vars] as const;
+    const observable = useMemo(() => isVoidScript(script) ? null : new ObservableScript(...deps), deps);
+    const [output, setOutput] = useState(() => observable?.output || successOutput(void(0)));
 
     useEffect(() => {
-        if (entry) {
-            setOutput(entry.output);
-            return entry.observe(setOutput);
-        }
-    }, [entry]);
+        setOutput(observable?.output || successOutput(void(0)));
+        return observable?.observe(setOutput);
+    }, [observable]);
 
     return output;
 }
 
-class CacheEntry {
+class ObservableScript {
     readonly #callbacks = new Map<(output: ObservedScript) => void, number>();
     readonly #host: ScriptHost;
     readonly #script: string;
@@ -87,12 +80,8 @@ class CacheEntry {
                 active = false;
                 if (decremented <= 0) {
                     this.#callbacks.delete(callback);
-                    if (this.#callbacks.size === 0) {
-                        setTimeout(() => {
-                            if (this.active && this.#callbacks.size === 0) {
-                                this.#stop();
-                            }
-                        }, LINGER_TIME_MS);
+                    if (this.active && this.#callbacks.size === 0) {
+                        this.#stop();
                     }
                 }
             }
@@ -149,47 +138,6 @@ class CacheEntry {
     }
 }
 
-const getCacheEntry = (
-    host: ScriptHost,
-    script: string,
-    instanceId: string | undefined,
-    vars?: Record<string, ScriptValue>,
-): CacheEntry => {
-    let perHost = PER_HOST_CACHE.get(host);
-    if (!perHost) {
-        PER_HOST_CACHE.set(host, perHost = new Map());
-    }
-
-    let perScript = perHost.get(script);
-    if (!perScript) {
-        perHost.set(script, perScript = new Map());
-    }
-
-    let perInstance = perScript.get(instanceId);
-    if (!perInstance) {
-        perScript.set(instanceId, perInstance = { mapped: new WeakMap() });
-    }
-
-    let perVars = vars ? perInstance.mapped.get(vars) : perInstance.unmapped;
-    if (!perVars) {
-        perVars = new CacheEntry(host, script, instanceId, vars);
-        if (vars) {
-            perInstance.mapped.set(vars, perVars);
-        } else {
-            perInstance.unmapped = perVars;
-        }
-    }
-
-    return perVars;
-};
-
-interface PerVarCache {
-    unmapped?: CacheEntry;
-    mapped: WeakMap<Record<string, ScriptValue>, CacheEntry>;
-}
-
-const PER_HOST_CACHE = new WeakMap<ScriptHost, Map<string, Map<string | undefined, PerVarCache>>>();
-
 const initialOutput: ObservedScript = Object.freeze({
     result: undefined,
     ready: false,
@@ -207,5 +155,3 @@ const errorOutput = (error: Error): ObservedScript => Object.freeze({
     ready: true,
     error,
 });
-
-const LINGER_TIME_MS = 1000;
