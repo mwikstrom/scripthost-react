@@ -43,7 +43,7 @@ export type ScriptInvoker = () => Promise<ScriptValue>;
 export function useObservedScript(script: string | null, options?: UseObservedScriptOptions): ObservedScript;
 
 // @public (undocumented)
-export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId" | "vars">;
+export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId" | "vars" | "context">;
 
 // @public (undocumented)
 export const useScriptHost: () => ScriptHost;
