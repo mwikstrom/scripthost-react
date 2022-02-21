@@ -10,6 +10,7 @@ export class ObservableScript {
     readonly #script: string;
     readonly #instanceId: string | undefined;
     readonly #vars: Record<string, ScriptValue> | undefined;
+    readonly #context: unknown;
     #output = initialOutput;
     #dispose: (() => void) | null = null;
 
@@ -18,11 +19,13 @@ export class ObservableScript {
         script: string, 
         instanceId: string | undefined, 
         vars: Record<string, ScriptValue> | undefined,
+        context: unknown,
     ) {
         this.#host = host;
         this.#script = script;
         this.#instanceId = instanceId;
         this.#vars = vars;
+        this.#context = context;
     }
 
     get output(): ObservedScript {
@@ -64,6 +67,7 @@ export class ObservableScript {
         const options: ScriptObserveOptions = {
             instanceId: this.#instanceId,
             vars: this.#vars,
+            context: this.#context,
             onNext: result => this.#onNext(result),
             onError: error => this.#onError(error),            
         };

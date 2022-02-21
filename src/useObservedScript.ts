@@ -18,15 +18,15 @@ export interface ObservedScript {
 /**
  * @public
  */
-export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId" | "vars">;
+export type UseObservedScriptOptions = Pick<ScriptEvalOptions, "instanceId" | "vars" | "context">;
 
 /**
  * @public
  */
 export function useObservedScript(script: string | null, options: UseObservedScriptOptions = {}): ObservedScript {
-    const { instanceId, vars } = options;
+    const { instanceId, vars, context } = options;
     const host = useScriptHost();
-    const deps = [host, script || "", instanceId, vars] as const;
+    const deps = [host, script || "", instanceId, vars, context] as const;
     const observable = useMemo(() => isVoidScript(script) ? null : new ObservableScript(...deps), deps);
     const [output, setOutput] = useState(() => observable?.output || successOutput(void(0)));
 
