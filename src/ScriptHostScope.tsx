@@ -14,11 +14,11 @@ export interface ScriptHostScopeProps {
  * @public
  */
 export const ScriptHostScope: FC<ScriptHostScopeProps> = props => {
-    const {  children } = props;
-    const host = useMemo(() => props.host ?? createBrowserScriptHost(), [props.host]);
+    const { children, host } = props;
+    const getter = useMemo(() => host ? () => host : once(createBrowserScriptHost), [host]);
     return (
         <ScriptHostContext.Provider
-            value={host}
+            value={getter}
             children={children}
         />
     );
@@ -27,6 +27,17 @@ export const ScriptHostScope: FC<ScriptHostScopeProps> = props => {
 /**
  * @public
  */
-export const useScriptHost = (): ScriptHost => useContext(ScriptHostContext);
+export const useScriptHost = (): ScriptHost => useContext(ScriptHostContext)();
 
-const ScriptHostContext = createContext<ScriptHost>(createBrowserScriptHost());
+const once = <T,>(func: () => T): () => T => {
+    let memo: T | undefined;
+    return () => {
+        if (memo === undefined) {
+            memo = func();
+        }
+        return memo;
+    };
+};
+
+type ScriptHostGetter = () => ScriptHost;
+const ScriptHostContext = createContext<ScriptHostGetter>(once(createBrowserScriptHost));
