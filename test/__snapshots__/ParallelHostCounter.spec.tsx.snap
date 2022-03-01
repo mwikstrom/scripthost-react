@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Parallel host counter: [1] Initializing 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Initializing
+  </div>,
+]
+`;
+
+exports[`Parallel host counter: [1] Value = 0 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    0
+  </div>,
+]
+`;
+
+exports[`Parallel host counter: [1] Value = 1 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    1
+  </div>,
+]
+`;
+
+exports[`Parallel host counter: [1] Value = 2 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    2
+  </div>,
+]
+`;
+
+exports[`Parallel host counter: [2] Initializing 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Initializing
+  </div>,
+]
+`;
+
+exports[`Parallel host counter: [2] Value = 0 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    0
+  </div>,
+]
+`;
+
+exports[`Parallel host counter: [2] Value = 1 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    1
+  </div>,
+]
+`;
+
+exports[`Parallel host counter: [2] Value = 2 1`] = `
+Array [
+  <button
+    onClick={[Function]}
+  >
+    Increment
+  </button>,
+  <div>
+    Value = 
+    2
+  </div>,
+]
+`;
