@@ -16,7 +16,7 @@ export declare function useScriptInvoker(script: string | null, options?: UseScr
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string \| null |  |
-|  options | [UseScriptInvokerOptions](./scripthost-react.usescriptinvokeroptions.md) |  |
+|  options | [UseScriptInvokerOptions](./scripthost-react.usescriptinvokeroptions.md) | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

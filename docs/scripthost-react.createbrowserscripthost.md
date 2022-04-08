@@ -15,7 +15,7 @@ export declare function createBrowserScriptHost(options?: ScriptHostOptions & Pi
 
 |  Parameter | Type | Description |
 |  --- | --- | --- |
-|  options | ScriptHostOptions &amp; Pick&lt;BrowserSandboxOptions, "unsafe"&gt; |  |
+|  options | ScriptHostOptions &amp; Pick&lt;BrowserSandboxOptions, "unsafe"&gt; | <i>(Optional)</i> |
 
 <b>Returns:</b>
 

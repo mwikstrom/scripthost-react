@@ -16,7 +16,7 @@ export declare function useObservedScript(script: string | null, options?: UseOb
 |  Parameter | Type | Description |
 |  --- | --- | --- |
 |  script | string \| null |  |
-|  options | [UseObservedScriptOptions](./scripthost-react.useobservedscriptoptions.md) |  |
+|  options | [UseObservedScriptOptions](./scripthost-react.useobservedscriptoptions.md) | <i>(Optional)</i> |
 
 <b>Returns:</b>
 
